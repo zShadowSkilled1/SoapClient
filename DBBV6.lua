@@ -9,7 +9,7 @@ local Window = SoapLibrary:CreateWindow({
 	ConfigurationSaving = {
 		Enabled = true,
 		FolderName = "SoapClient", -- Create a custom folder for your hub/game
-		FileName = "SoapClient"
+		FileName = "SoapClientDBBVSIX"
 	},
         Discord = {
         	Enabled = false,
