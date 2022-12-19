@@ -35,6 +35,7 @@ _G.FOV = 90
 _G.AEBest = false
 _G.AAFK = true
 _G.AKick = false
+_G.NWM = false
 ETH = "Starter Egg"
 
 local AdminTable = {
@@ -50,7 +51,7 @@ function AF()
     if _G.AF == true then
     SoapLibrary:Notify({
         Title = "SoapClient",
-        Content = "We just freeze your character movements to avoid breaking this feature. Disable AutoFarm to enable your character controls. AutoFarming process will start soon.",
+        Content = "We just freeze your character movements to avoid breaking this feature. AutoFarming process will start soon.",
         Duration = 5,
         Image = 4483362458,
         Actions = { -- Notification Actions
@@ -68,7 +69,7 @@ pathFinder = game:GetService("PathfindingService")
 
 path = pathFinder:CreatePath()
 
-path:ComputeAsync(char.HumanoidRootPart.Position, game:GetService("Workspace").Earth.Jump.JumpPad.Position)
+path:ComputeAsync(char.HumanoidRootPart.Position, game:GetService("Workspace").Earth.Jump.Hexagon.Position)
 --Vector3.new(-0, 1, -1)
     while _G.AF == true do
         local player = game.Players.LocalPlayer
@@ -177,7 +178,7 @@ function AKick()
                 Ignore = {
                     Name = "Ok !",
                     Callback = function()
-                        
+
                     end
                 },
             },
@@ -202,6 +203,28 @@ function AKick()
     end
 end
     end
+
+function NWM()
+    if _G.NWM == true then
+    SoapLibrary:Notify({
+        Title = "Warning",
+        Content = "Enabling the NoWalls mod can make your game lag.",
+        Duration = 5,
+        Image = 4483362458,
+        Actions = { -- Notification Actions
+            Ignore = {
+                Name = "Ok !",
+                Callback = function()
+                    --Script to do when clicked here
+                end
+            },
+        },
+    })
+        game:GetService("ReplicatedStorage").Events.UpdateSetting:FireServer("StudWalls")
+elseif _G.NWM == false then
+    game:GetService("ReplicatedStorage").Events.UpdateSetting:FireServer("StudWalls")
+end
+end
 
 local CharTab = Window:CreateTab("Game", 0) -- Title, Image
 local PetsTab = Window:CreateTab("Pets", 0) -- Title, Image
@@ -240,7 +263,7 @@ local AAFK = CharTab:CreateToggle({
 })
 
 local AH = PetsTab:CreateToggle({
-	Name = "AutoHatch Starter Egg",
+	Name = "AutoHatch",
 	CurrentValue = false,
 	Flag = "AH", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
@@ -286,6 +309,16 @@ local RFOV = CharacterTab:CreateButton({
 	Name = "Reset FOV",
 	Callback = function()
 		FOVSlider:Set(90)
+	end,
+})
+
+local NoWallsMod = CharacterTab:CreateToggle({
+	Name = "NoWalls",
+	CurrentValue = false,
+	Flag = "NoWallsMod", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+        _G.NWM = Value
+		NWM()
 	end,
 })
 
