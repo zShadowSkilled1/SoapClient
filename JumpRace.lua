@@ -36,6 +36,7 @@ _G.AEBest = false
 _G.AAFK = true
 _G.AKick = false
 _G.NWM = false
+_G.World = "Earth"
 ETH = "Starter Egg"
 
 local AdminTable = {
@@ -92,6 +93,95 @@ end
     end
 end
 
+function AF3()
+    if _G.AF == true then
+    SoapLibrary:Notify({
+        Title = "SoapClient",
+        Content = "We just freeze your character movements to avoid breaking this feature. AutoFarming process will start soon.",
+        Duration = 5,
+        Image = 4483362458,
+        Actions = { -- Notification Actions
+            Ignore = {
+                Name = "Ok !",
+                Callback = function()
+                    --Script to do when clicked here
+                end
+            },
+        },
+    })
+end
+    char = game.Players.LocalPlayer.Character
+pathFinder = game:GetService("PathfindingService")
+
+path = pathFinder:CreatePath()
+
+path:ComputeAsync(char.HumanoidRootPart.Position, game.Workspace.Space.Jump.JumpPad.Position)
+--Vector3.new(-0, 1, -1)
+    while _G.AF == true do
+        local player = game.Players.LocalPlayer
+        local playerScripts = player:WaitForChild("PlayerScripts")
+        local PlayerModule = require(playerScripts:WaitForChild("PlayerModule"))
+        local Controls = PlayerModule:GetControls()
+
+        Controls:Disable()
+        for i, wayPoint in pairs(path:GetWaypoints()) do
+	char.Humanoid:MoveTo(wayPoint.Position)
+
+	
+	if wayPoint.Action == Enum.PathWaypointAction.Jump then
+		char.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+	end
+	
+	char.Humanoid.MoveToFinished:wait()
+    wait(game:GetService("Players").LocalPlayer.PlayerGui.Main.Training.Visible == true)
+end
+    end
+end
+function AF5()
+    if _G.AF == true then
+    SoapLibrary:Notify({
+        Title = "SoapClient",
+        Content = "We just freeze your character movements to avoid breaking this feature. AutoFarming process will start soon.",
+        Duration = 5,
+        Image = 4483362458,
+        Actions = { -- Notification Actions
+            Ignore = {
+                Name = "Ok !",
+                Callback = function()
+                    --Script to do when clicked here
+                end
+            },
+        },
+    })
+end
+    char = game.Players.LocalPlayer.Character
+pathFinder = game:GetService("PathfindingService")
+
+path = pathFinder:CreatePath()
+
+path:ComputeAsync(char.HumanoidRootPart.Position, game:GetService("Workspace").Underwater.Jump.JumpPad.Position)
+--Vector3.new(-0, 1, -1)
+    while _G.AF == true do
+        local player = game.Players.LocalPlayer
+        local playerScripts = player:WaitForChild("PlayerScripts")
+        local PlayerModule = require(playerScripts:WaitForChild("PlayerModule"))
+        local Controls = PlayerModule:GetControls()
+
+        Controls:Disable()
+        for i, wayPoint in pairs(path:GetWaypoints()) do
+	char.Humanoid:MoveTo(wayPoint.Position)
+
+	
+	if wayPoint.Action == Enum.PathWaypointAction.Jump then
+		char.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+	end
+	
+	char.Humanoid.MoveToFinished:wait()
+    wait(game:GetService("Players").LocalPlayer.PlayerGui.Main.Training.Visible == true)
+end
+    end
+end
+
 function AF2()
     while _G.AF == false do
         wait(1)
@@ -104,13 +194,12 @@ function AF2()
     end
 end
 
-function AF3()
+function AF4()
     while _G.AF == true do
         wait(1)
             if not WalkToPoint == Vector3.new(0, 0, 0) then
                 print("AutoFarming Started")
             else
-
                 _G.AF = false
                 _G.AF = true
                 SoapLibrary:Notify({
@@ -226,6 +315,33 @@ elseif _G.NWM == false then
 end
 end
 
+function HBlur()
+   while _G.HBlur == true do
+    wait(0.01)
+        game.Lighting.EggDepth.Enabled = false
+        game:GetService("Players").LocalPlayer.PlayerGui.Main.Enabled = true
+        game:GetService("Players").LocalPlayer.PlayerGui.UIScripts.Enabled = true
+        game:GetService("Players").LocalPlayer.PlayerGui.Eggs.Enabled = true
+        game:GetService("Players").LocalPlayer.PlayerGui.Pets.Enabled = true
+        game:GetService("Players").LocalPlayer.PlayerGui.Settings.Enabled = true
+        game:GetService("Players").LocalPlayer.PlayerGui.Rebirth.Enabled = true
+        game:GetService("Players").LocalPlayer.PlayerGui.Shop.Enabled = true
+   end
+end
+
+function AF0()
+    if _G.World == "Earth" then
+        game:GetService("ReplicatedStorage").Events.UpdateWorld:FireServer(1)
+        AF()
+    elseif _G.World == "Space" then
+        game:GetService("ReplicatedStorage").Events.UpdateWorld:FireServer(2)
+            AF3()
+        elseif _G.World == "Sea" then
+            game:GetService("ReplicatedStorage").Events.UpdateWorld:FireServer(3)
+                AF5()
+    end
+end
+
 local CharTab = Window:CreateTab("Game", 0) -- Title, Image
 local PetsTab = Window:CreateTab("Pets", 0) -- Title, Image
 local CharacterTab = Window:CreateTab("Utilities", 0)
@@ -237,8 +353,17 @@ local ACT = CharTab:CreateToggle({
 	Flag = "AF", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Value)
 		_G.AF = Value
-        AF()
-        AF2()
+        AF0()
+	end,
+})
+
+local AMode = CharTab:CreateDropdown({
+	Name = "AutoFarm World",
+	Options = {"Earth","Space","Sea"},
+	CurrentOption = "Earth",
+	Flag = "EDropdown", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Option)
+		_G.World = Option
 	end,
 })
 
@@ -279,6 +404,16 @@ local AEBest = PetsTab:CreateToggle({
 	Callback = function(Value)
 		_G.AEBest = Value
         AEBest()
+	end,
+})
+
+local HBlur = PetsTab:CreateToggle({
+	Name = "Bypass Egg Hatch",
+	CurrentValue = false,
+	Flag = "HBlur", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		_G.HBlur = Value
+        HBlur()
 	end,
 })
 
