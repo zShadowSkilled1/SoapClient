@@ -26,10 +26,6 @@ local Window = SoapLibrary:CreateWindow({
 	}
 })
 
-local queueonteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
-local httpservice = game:GetService('HttpService')
-queueonteleport("https://raw.githubusercontent.com/zShadowSkilled1/SoapClient/main/PDONATE.lua")
-
 --Values
 
 _G.AutoAsk = false
@@ -178,3 +174,7 @@ local ThanksMessage = FarmTab:CreateInput({
 		_G.ThanksMessage = Text
 	end,
 })
+
+local queueonteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
+local httpservice = game:GetService('HttpService')
+queueonteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/zShadowSkilled1/SoapClient/main/PDONATE.lua'))()")
