@@ -28,7 +28,7 @@ local Window = SoapLibrary:CreateWindow({
 
 local queueonteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
 local httpservice = game:GetService('HttpService')
-queueonteleport("")
+queueonteleport("https://raw.githubusercontent.com/zShadowSkilled1/SoapClient/main/PDONATE.lua")
 
 --Values
 
