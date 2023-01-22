@@ -111,7 +111,7 @@ local AutoThanks = FarmTab:CreateToggle({
 	Flag = "AutoThanks", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you are using configuration saving to ensure no overlaps
 	Callback = function(Value)
 		_G.AutoThanks = Value
-		AutoThanks()
+		--AutoThanks()
 	end,
 })
 
